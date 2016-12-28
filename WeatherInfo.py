@@ -5,7 +5,6 @@ import datetime
 
 def GetWeatherInfo(appid, city):
 	openweathermap = 'http://api.openweathermap.org/data/2.5/weather?q='
-	print(openweathermap + city + appid)
 	weatherInfo = get(openweathermap + city + appid).json()
 	return weatherInfo
 
@@ -83,10 +82,8 @@ if __name__ == '__main__':
 	with open('../openweathermap.appid','r') as f:
 		appid = f.read()
 		appid = appid[:-1]
-		print(appid)
 
 	weather = GetWeatherInfo(appid,city)
-	print(weather)
 
 	print(GetDataDateTime(weather))
 	print(GetSunriseDateTime(weather))
