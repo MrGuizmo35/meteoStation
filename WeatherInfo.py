@@ -5,6 +5,7 @@ import datetime
 
 def GetWeatherInfo(appid, city):
 	openweathermap = 'http://api.openweathermap.org/data/2.5/weather?q='
+	print(openweathermap + city + appid)
 	weatherInfo = get(openweathermap + city + appid).json()
 	return weatherInfo
 
@@ -12,6 +13,10 @@ def GetWeatherIcon(weatherInfo):
 	iconId = weatherInfo['weather'][0]['icon']
 	icon = get("http://openweathermap.org/img/w/"+iconId+".png")
 	return icon
+
+def GetWeatherIconLink(weatherInfo):
+	iconId = weatherInfo['weather'][0]['icon']
+	return "http://openweathermap.org/img/w/"+iconId+".png"
 
 def GetDataDateTime(weatherInfo):
 	dataTime = datetime.datetime.fromtimestamp(weatherInfo['dt'])
@@ -75,14 +80,20 @@ def GetWindDirection(weatherInfo):
 
 if __name__ == '__main__':
 	city = 'Pissy-Poville'
+	with open('../openweathermap.appid','r') as f:
+		appid = f.read()
+		appid = appid[:-1]
+		print(appid)
 
-	weather = GetWeatherInfo(city)
+	weather = GetWeatherInfo(appid,city)
+	print(weather)
 
 	print(GetDataDateTime(weather))
 	print(GetSunriseDateTime(weather))
 	print(GetSunsetDateTime(weather))
 	print(GetWeatherDescription(weather))
 	print(GetTemperatureInCelsius(weather))
+	print(GetWeatherIconLink(weather))
 	print(GetHumidity(weather))
 	print(GetWindSpeed(weather))
 	print(GetWindDirection(weather))	
