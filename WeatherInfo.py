@@ -78,19 +78,35 @@ def GetWindDirection(weatherInfo):
 	return direction
 
 if __name__ == '__main__':
+	import os
 	city = 'Pissy-Poville'
 	with open('../openweathermap.appid','r') as f:
 		appid = f.read()
-		appid = appid[:-1]
+		if os.name != 'nt':
+			appid = appid[:-1]
 
 	weather = GetWeatherInfo(appid,city)
 
 	print(GetDataDateTime(weather))
+	DataDateTime = GetDataDateTime(weather)
 	print(GetSunriseDateTime(weather))
 	print(GetSunsetDateTime(weather))
 	print(GetWeatherDescription(weather))
+	WeatherDescription = GetWeatherDescription(weather)
 	print(GetTemperatureInCelsius(weather))
+	Temperature = GetTemperatureInCelsius(weather)
 	print(GetWeatherIconLink(weather))
+	IconLink = GetWeatherIconLink(weather)
 	print(GetHumidity(weather))
 	print(GetWindSpeed(weather))
+	WindSpeed = GetWindSpeed(weather)
 	print(GetWindDirection(weather))	
+	WindDirection = GetWindDirection(weather)
+	replacements = {'[DESC]':WeatherDescription[1],'[ICON]':IconLink, '[TODAY]':str(DataDateTime), '[TEMP]':str(Temperature)+'°C','[WIND_SPEED]':str(WindSpeed)+'km/h','[WIND_DIR]':WindDirection}
+
+	with open('WeatherInfo_template.html') as infile, open('WeatherInfo.html', 'w') as outfile:
+		for line in infile:
+			for src, target in replacements.items():
+				line = line.replace(src, target)
+			outfile.write(line)
+			print(line)

@@ -24,6 +24,7 @@ ul
 	padding: 30;
 	width: 25%;
 }
+
 .introduction
 {
 	color:green;
@@ -50,7 +51,9 @@ nav
 section
 {
 	display: flex;
-	width: 60%;
+	align-items: center;
+	margin: 150px;
+	width: 50%;
 }
 
 aside
@@ -64,7 +67,7 @@ aside
 	color: white;
 	font-size: 0.9em;
 	text-align: justify;
-	width = 25%;
+	width : 25%;
 }
 
 aside h1
@@ -81,4 +84,16 @@ footer
 	bottom: 0px;
 	width: 100%;
 	background-color: white;
+}
+
+table
+{
+	border-collapse: collapse;
+}
+
+td
+{
+	font-size: 1.3em;
+	border: 1px solid black;
+	text-align: center;
 }
