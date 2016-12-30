@@ -2,7 +2,7 @@
 
 from peewee import *
 
-f = open("../.mySQLCredentials",'r')
+f = open("~/.mySQLCredentials",'r')
 cr = f.readline()
 f.close()
 t = cr.split(',')
