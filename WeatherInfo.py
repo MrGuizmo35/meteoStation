@@ -2,6 +2,7 @@
 from requests import get
 import json
 import datetime
+from Meteo import *
 
 def GetWeatherInfo(appid, city):
 	openweathermap = 'http://api.openweathermap.org/data/2.5/weather?q='
@@ -21,6 +22,9 @@ def GetDataDateTime(weatherInfo):
 	dataTime = datetime.datetime.fromtimestamp(weatherInfo['dt'])
 	return dataTime
 
+def GetDataTimeStamp(weatherInfo):
+	return weatherInfo['dt']
+
 def GetSunriseDateTime(weatherInfo):
 	sunrise = datetime.datetime.fromtimestamp(weatherInfo['sys']['sunrise'])
 	return sunrise
@@ -39,42 +43,48 @@ def GetHumidity(weatherInfo):
 	return weatherInfo['main']['humidity']
 
 def GetWindSpeed(weatherInfo):
-	return 3.6*weatherInfo['wind']['speed']
+	if 'wind' in weatherInfo:
+		return 3.6*weatherInfo['wind']['speed']
+	else:
+		return 0
 
 def GetWindDirection(weatherInfo):
-	dir_v = weatherInfo['wind']['deg']
-	if dir_v > 348.75 and dir_v <= 11.25:
-		direction = 'N'
-	elif dir_v > 11.25 and dir_v <= 33.75:
-		direction = 'NNE'
-	elif dir_v > 33.75 and dir_v <= 56.25:
-		direction = 'NE'
-	elif dir_v > 56.25 and dir_v <= 78.75:
-		direction = 'ENE'
-	elif dir_v > 78.75 and dir_v <= 101.25:
-		direction = 'E'
-	elif dir_v > 101.25 and dir_v <= 123.75:
-		direction = 'ESE'
-	elif dir_v > 123.75 and dir_v <= 146.25:
-		direction = 'SE'
-	elif dir_v > 146.25 and dir_v <= 168.75:
-		direction = 'SSE'
-	elif dir_v > 168.75 and dir_v <= 191.25:
-		direction = 'S'
-	elif dir_v > 191.25 and dir_v <= 213.75:
-		direction = 'SSW'
-	elif dir_v > 213.75 and dir_v <= 236.25:
-		direction = 'SW'
-	elif dir_v > 236.25 and dir_v <= 258.75:
-		direction = 'WSW'
-	elif dir_v > 258.75 and dir_v <= 281.25:
-		direction = 'W'
-	elif dir_v > 281.25 and dir_v <= 303.75:
-		direction = 'WNW'
-	elif dir_v > 303.75 and dir_v <= 326.25:
-		direction = 'NW'
+	if 'wind' in weatherInfo:
+		dir_v = weatherInfo['wind']['deg']
+		if dir_v > 348.75 and dir_v <= 11.25:
+			direction = 'N'
+		elif dir_v > 11.25 and dir_v <= 33.75:
+			direction = 'NNE'
+		elif dir_v > 33.75 and dir_v <= 56.25:
+			direction = 'NE'
+		elif dir_v > 56.25 and dir_v <= 78.75:
+			direction = 'ENE'
+		elif dir_v > 78.75 and dir_v <= 101.25:
+			direction = 'E'
+		elif dir_v > 101.25 and dir_v <= 123.75:
+			direction = 'ESE'
+		elif dir_v > 123.75 and dir_v <= 146.25:
+			direction = 'SE'
+		elif dir_v > 146.25 and dir_v <= 168.75:
+			direction = 'SSE'
+		elif dir_v > 168.75 and dir_v <= 191.25:
+			direction = 'S'
+		elif dir_v > 191.25 and dir_v <= 213.75:
+			direction = 'SSW'
+		elif dir_v > 213.75 and dir_v <= 236.25:
+			direction = 'SW'
+		elif dir_v > 236.25 and dir_v <= 258.75:
+			direction = 'WSW'
+		elif dir_v > 258.75 and dir_v <= 281.25:
+			direction = 'W'
+		elif dir_v > 281.25 and dir_v <= 303.75:
+			direction = 'WNW'
+		elif dir_v > 303.75 and dir_v <= 326.25:
+			direction = 'NW'
+		else:
+			direction = 'NNW'
 	else:
-		direction = 'NNW'
+		direction = 'NA'
 	return direction
 
 if __name__ == '__main__':
@@ -86,7 +96,7 @@ if __name__ == '__main__':
 			appid = appid[:-1]
 
 	weather = GetWeatherInfo(appid,city)
-
+	print(weather)
 	print(GetDataDateTime(weather))
 	DataDateTime = GetDataDateTime(weather)
 	print(GetSunriseDateTime(weather))
@@ -109,4 +119,8 @@ if __name__ == '__main__':
 			for src, target in replacements.items():
 				line = line.replace(src, target)
 			outfile.write(line)
-			print(line)
+
+	meteo = Meteo(dataDateTime=(GetDataTimeStamp(weather)),description=WeatherDescription[1],designation=WeatherDescription[0],temperature=Temperature,humidity=int(GetHumidity(weather)),windSpeed=float(WindSpeed),windDirection=WindDirection)
+	meteo.save()
+
+
