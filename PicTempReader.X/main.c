@@ -35,14 +35,21 @@ void main(void) {
     DS18B20_AS_OUTPOUT();
     DS18B20_SET();
     
+    DS18B20_Reset();
+    
+    
+    
     TRISA5 = 0;
     LATA5 = 0;
     
     while(1)
     {
+        if(DS18B20_Reset())
+        {
         LATA5 = ~LATA5;
         for(i = 0; i < 255; i++)
             for(j = 0; j < 255; j++);
+        }
     }
     return;
 }

@@ -13,7 +13,7 @@ uint8_t DS18B20_Reset()
     }
     DS18B20_AS_INPUT();
     DS18B20_TIMER = 0;
-    while(DS18B20_TIMER < 200);
+    while(DS18B20_TIMER < 140);
     presence = DS18B20_READ();
     for(i = 0; i < 4; i++)
     {
@@ -24,7 +24,7 @@ uint8_t DS18B20_Reset()
     return presence;    
 }
 
-void DS18B20_Write(uint8_t w)
+void DS18B20_WriteByte(uint8_t w)
 {
     uint8_t i;
     
@@ -36,10 +36,12 @@ void DS18B20_Write(uint8_t w)
         if(w & 1 << i)
         {
             while(DS18B20_TIMER < 2);
+            DS18B20_SET();
+            while(DS18B20_TIMER < 120);
         }
         else
         {
-            while(DS18B20_TIMER < 160);
+            while(DS18B20_TIMER < 120);
         }
         DS18B20_SET();
         DS18B20_TIMER = 0;
