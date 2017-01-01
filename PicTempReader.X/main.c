@@ -22,15 +22,22 @@
 #pragma config LVP = ON         // Low-Voltage Programming Enable (Low-voltage programming enabled)
 
 // #pragma config statements should precede project file includes.
-// Use project enums instead of #define for ON and OFF.
 
 #include <xc.h>
+#include "ds18b20.h"
+
 
 void main(void) {
     unsigned int i, j;
     
+    OPTION_REGbits.T0CS = 0;
+    OSCCONbits.IRCF = 0b1110;
+    DS18B20_AS_OUTPOUT();
+    DS18B20_SET();
+    
     TRISA5 = 0;
     LATA5 = 0;
+    
     while(1)
     {
         LATA5 = ~LATA5;
